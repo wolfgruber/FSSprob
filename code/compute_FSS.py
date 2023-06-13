@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on 10.03.2022
+Created on  10.03.2022
+Last update 13.06.2023
 
 author: Ludwig Wolfgruber
 e-mail: ludwig.wolfgruber@gmx.at
