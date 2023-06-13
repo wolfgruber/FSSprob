@@ -1,3 +1,9 @@
+! Created on  10.03.2022
+! Last update 13.06.2023
+!
+! author: Ludwig Wolfgruber
+! e-mail: ludwig.wolfgruber@gmx.at
+
 MODULE mod_fss
 
 IMPLICIT NONE
@@ -143,10 +149,11 @@ SUBROUTINE fss_prob (n1, n2, n_ens, n_thrsh, n_kernel, fcst, obs, thrsh, kernel,
     ! (ensemble size, x, y) and contains real forcast variables.
     INTEGER, INTENT(IN) :: n1, n2, n_ens, n_thrsh, n_kernel
     INTEGER, INTENT(IN) :: kernel(n_kernel)
-    INTEGER :: i, j, k, l
-    REAL, INTENT(IN) :: fcst(n_ens, n1, n2), obs(n1, n2), thrsh(n_thrsh)
-    REAL :: fcst_field(n1, n2), obs_field(n1, n2), ens_field(n1, n2)
-    REAL, INTENT(OUT) :: fss(n_thrsh, n_kernel)
+    INTEGER             :: i, j
+    REAL, INTENT(IN)    :: fcst(n_ens, n1, n2), obs(n1, n2), thrsh(n_thrsh)
+    REAL                :: fcst_field(n1, n2), obs_field(n1, n2)
+    REAL                :: ens_field(n1, n2)
+    REAL, INTENT(OUT)   :: fss(n_thrsh, n_kernel)
     
     fss  = 0.
 
@@ -176,14 +183,17 @@ END SUBROUTINE ensemble_fss_one_lead_time
 
 SUBROUTINE ensemble_fss_one_lead_time (n1, n2, n_ens, n_ens_size, n_thrsh, n_kernel, fcst, obs, ens_size, thrsh, kernel, fss)
     ! compute the FSSprob for one (ensemble forecast, observation) pair and
-    ! different thresholds and kernel sizes. 
+    ! different ensemble subsamples, thresholds and kernel sizes. A setup like
+    ! this was used to produce results for the study "The fractions skill score
+    ! for ensemble forecast verification". Do not use for regular verification!
     INTEGER, INTENT(IN) :: n1, n2, n_ens, n_ens_size, n_thrsh, n_kernel
     INTEGER, INTENT(IN) :: ens_size(n_ens_size), kernel(n_kernel)
-    INTEGER :: i, j, k, l, sample(n_ens_size), ens_idx
-    REAL, INTENT(IN) :: fcst(n_ens, n1, n2), obs(n1, n2), thrsh(n_thrsh)
-    REAL :: fcst_field(n1, n2), obs_field(n1, n2), ens_field(n1,n2)
-    REAL, ALLOCATABLE :: mean_fss(:,:,:)
-    REAL, INTENT(OUT) :: fss(n_ens_size, n_thrsh, n_kernel)
+    INTEGER             :: i, j, k, l, sample(n_ens_size), ens_idx
+    REAL, INTENT(IN)    :: fcst(n_ens, n1, n2), obs(n1, n2), thrsh(n_thrsh)
+    REAL                :: fcst_field(n1, n2), obs_field(n1, n2)
+    REAL                :: ens_field(n1,n2)
+    REAL, ALLOCATABLE   :: mean_fss(:,:,:)
+    REAL, INTENT(OUT)   :: fss(n_ens_size, n_thrsh, n_kernel)
     
     fss  = 0.
     

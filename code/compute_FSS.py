@@ -11,7 +11,6 @@ e-mail: ludwig.wolfgruber@gmx.at
 import xarray as xr
 import numpy as np
 import datetime as dt
-#from enstools.io import read, write # used to load and save NET CDF files
 import pickle
 
 
@@ -27,7 +26,7 @@ def compute_integral_table(field):
 
     Returns
     -------
-    np.array()
+    output : np.array
         cumulative sum of input in both dimensions.
 
     '''
@@ -36,7 +35,8 @@ def compute_integral_table(field):
 
 def integral_filter(field, n, table=None):
     '''
-    Fast summed area table version of the sliding accumulator.
+    Fast summed area table version of the sliding accumulator. Corrected
+    version of Faggian (2015)
 
     Parameters
     ----------
@@ -49,7 +49,7 @@ def integral_filter(field, n, table=None):
 
     Returns
     -------
-    np.array
+    integral_table : np.array
         filtered input field.
 
     '''
@@ -85,7 +85,7 @@ def integral_filter(field, n, table=None):
 
 def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
     '''
-    Compute the fraction skill score using summed area tables.
+    Compute the fraction skill score using summed area tables. 
 
     Parameters
     ----------
@@ -106,11 +106,9 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
 
     Returns
     -------
-    float
+    output : float
         FSS for given kernel size
-    (np.array, np.array, dic)
-        tuple of (FSS, FSS_err, FSS_dict).
-
+        
     '''
     fhat = integral_filter(fcst, window, fcst_cache).astype(np.float64)
     ohat = integral_filter(obs, window, obs_cache).astype(np.float64)
@@ -120,12 +118,59 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
     return 1. - num / denom
 
 
+def fss_prob(fcst, obs, thrsh, window):
+    '''
+    Apply FSS on a pair of forecast - observation data, with different
+    thresholds given in thrsh and different windows (neighbourhoods, kernel
+    sizes) given in window.
+
+    Parameters
+    ----------
+    fcst : xarray
+        forecast to verify. In each forecast the ensemble members are arranged
+        on the first axis.
+    obs : xarray
+        observation to verify the forecast.
+    thrsh : np.array
+        thresholds for which the FSS is computed.
+    window : np.array
+        windows (neighbourhoods, kernel sizes) for which the FSS is computed.
+
+    Returns
+    -------
+    fss : np.array
+        FSS aranged like [ensemble size, threshold, window].
+
+    '''
+    n_thrsh = len(thrsh)
+    n_window = len(window)
+    
+    fss = np.empty((n_thrsh, n_window))
+
+    for l in range(n_thrsh):
+        thr_fcst = np.mean(fcst >= thrsh[l], axis=0)
+        thr_obs = obs >= thrsh[l]
+                    
+        fcst_cache = compute_integral_table(thr_fcst)
+        obs_cache = compute_integral_table(thr_obs)
+                    
+        for m in range(n_window):
+            fss[l,m] = compute_fss(
+                fcst=thr_fcst, obs=thr_obs, window=window[m],
+                fcst_cache=fcst_cache, obs_cache=obs_cache
+                )
+    
+    return fss
+
+
 def apply_fss_mean_in_ens(fcst, obs, ens_size, thrsh, window):
     '''
-    Apply FSS on a list of forecast - observation data, with ensemble size
+    Apply FSS on a pair of forecast - observation data, with ensemble size
     given in ens_size and different thresholds given in thrsh. The ensebles 
     are prepared that before taking the average, the members are compared with
-    the threshold.
+    the threshold. A setup like this was used to produce results for the study
+    "The fractions skill score for ensemble forecastverification". Do not use
+    for regular verification!
 
     Parameters
     ----------
@@ -145,23 +190,15 @@ def apply_fss_mean_in_ens(fcst, obs, ens_size, thrsh, window):
     Returns
     -------
     fss : np.array
-        FSS aranged like [forecast, ensemble size, threshold, window].
-    fss_err : np.array
-        standard deviation of the FSS.
-    fss_dict : dic
-        DESCRIPTION.
+        FSS aranged like [ensemble size, threshold, window].
 
     '''
-    #n_fcst = len(fcst_list)
     n_ens = len(ens_size)
     n_thrsh = len(thrsh)
     n_window = len(window)
     sample = ens_size[-1] // ens_size
     
     fss = np.empty((n_ens, n_thrsh, n_window))
-    #fss_err = np.empty((n_ens, n_thrsh, n_window))
-    
-    #fss_dict = {}
                     
     for j in range(n_ens):
         fss_mean = np.empty((sample[j],n_thrsh,n_window))
@@ -187,11 +224,8 @@ def apply_fss_mean_in_ens(fcst, obs, ens_size, thrsh, window):
             ens_start = ens_start + ens_size[j]
                     
         fss[j,:,:] = np.mean(fss_mean, axis=0)
-        #fss_err[j,:,:] = np.std(fss_mean, axis=0, ddof=1)
-            
-        #fss_dict['ens_size_{:}'.format(j)] = fss_mean
     
-    return fss#, fss_err, fss_dict
+    return fss
 
 '''
 # define params
