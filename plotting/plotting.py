@@ -43,7 +43,7 @@ plt.rcParams['figure.dpi'] = 300
 plt.rcParams['axes.grid'] = True
 
 # load threshold data for all functions
-all_thrsh, all_perc = np.load('/jetfs/home/lwolfgruber/data/percentile_no_thrsh_random.npy',  allow_pickle=True)
+all_thrsh, all_perc = np.load('../data/percentile_no_thrsh_random.npy',  allow_pickle=True)
 all_occ = 100 - all_perc
 occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
 thrsh = np.array([15.358784165382353, 6.546857919692981, 4.558161976337443,
@@ -88,11 +88,11 @@ def dev_by_three(x):
     return x/3
 
 
-# # figure 2, precipitation statistics
 
 def plot_precep_statistic():
+    # # figure 2, precipitation statistics
     # load and average the data
-    all_thrsh, all_perc = np.load('/jetfs/home/lwolfgruber/data/percentile_no_thrsh_random.npy',  allow_pickle=True)
+    all_thrsh, all_perc = np.load('../data/percentile_no_thrsh_random.npy',  allow_pickle=True)
     all_occ = 100 - all_perc
     occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
     thrsh = np.array([15.358784165382353, 6.546857919692981, 4.558161976337443,
@@ -102,14 +102,13 @@ def plot_precep_statistic():
                       0.0668206149339677, 0.042710336297750465, 0.02781107142567632,
                       0.016654083877801935, 0.009048837069422012, 0.0])
     
-    above_thrsh = np.load('/jetfs/home/lwolfgruber/data/random_truth_ensemble/above_thrsh.npy')
+    above_thrsh = np.load('../data/above_thrsh.npy')
     above_thrsh = np.array([above_thrsh[:,:,i].flatten() for i in range(len(thrsh))])
     mean_above = np.mean(above_thrsh, axis=1)
     median_above = np.median(above_thrsh, axis=1)
     p25_above, p75_above = np.quantile(above_thrsh, [0.25,0.75], axis=1)
     min_above = np.min(above_thrsh, axis=1)
     max_above = np.max(above_thrsh, axis=1)
-
 
     thrsh_idx = [1, 7, 15]
 
@@ -119,41 +118,41 @@ def plot_precep_statistic():
     ax[0].scatter(occ, match_pos(occ, all_occ, all_thrsh), color='k', zorder=5, label='percentiles')
     for idx in thrsh_idx:
         ax[0].text(occ[idx]*1.1, thrsh[idx]*1.2, '{:.0f}'.format(100-occ[idx]))
-        ax[0].semilogy()
-        ax[0].semilogx()
-        ax[0].set_ylim(10e-5)
-        ax[0].legend()
-        ax[0].set_xlabel('Frequency of Occurence [%]')
-        ax[0].set_ylabel('Threshold [mm/h]')
+    ax[0].semilogy()
+    ax[0].semilogx()
+    ax[0].set_ylim(10e-5)
+    ax[0].legend()
+    ax[0].set_xlabel('Frequency of Occurence [%]')
+    ax[0].set_ylabel('Threshold [mm/h]')
         
-        ax[1].plot(occ[:], mean_above[:], linestyle=stylelist[0], color=vir4[0], label='mean')
-        ax[1].plot(occ[:], median_above[:], linestyle=stylelist[1], color=vir4[1], label='median')
-        ax[1].plot(occ[:], p25_above[:], linestyle=stylelist[2], color=vir4[2], label='percentiles 25 & 75')
-        ax[1].plot(occ[:], p75_above[:], linestyle=stylelist[2], color=vir4[2])
-        ax[1].plot(occ[:], min_above[:], linestyle=stylelist[3], color=vir4[3], label='min & max')
-        ax[1].plot(occ[:], max_above[:], linestyle=stylelist[3], color=vir4[3])
-        ax[1].vlines(ymin=0, ymax=60, x=occ[thrsh_idx], linestyle='dashed', color='k', linewidth=1)
-        for idx in thrsh_idx:
-            ax[1].text(occ[idx]+0.25, 34, '{:.0f}'.format(100-occ[idx]))
+    ax[1].plot(occ[:], mean_above[:], linestyle=stylelist[0], color=vir4[0], label='mean')
+    ax[1].plot(occ[:], median_above[:], linestyle=stylelist[1], color=vir4[1], label='median')
+    ax[1].plot(occ[:], p25_above[:], linestyle=stylelist[2], color=vir4[2], label='percentiles 25 & 75')
+    ax[1].plot(occ[:], p75_above[:], linestyle=stylelist[2], color=vir4[2])
+    ax[1].plot(occ[:], min_above[:], linestyle=stylelist[3], color=vir4[3], label='min & max')
+    ax[1].plot(occ[:], max_above[:], linestyle=stylelist[3], color=vir4[3])
+    ax[1].vlines(ymin=0, ymax=60, x=occ[thrsh_idx], linestyle='dashed', color='k', linewidth=1)
+    for idx in thrsh_idx:
+        ax[1].text(occ[idx]+0.25, 34, '{:.0f}'.format(100-occ[idx]))
             
-        ax[1].set_xlim(0, 33)
-        ax[1].legend()
-        #ax[1].semilogx()
-        ax[1].set_xlabel('Frequency of Occurence [%]')
-        ax[1].set_ylabel('Grid Points above Threshold [%]')
+    ax[1].set_xlim(0, 33)
+    ax[1].legend()
+    #ax[1].semilogx()
+    ax[1].set_xlabel('Frequency of Occurence [%]')
+    ax[1].set_ylabel('Grid Points above Threshold [%]')
 
-        ax[1].yaxis.tick_right()
-        ax[1].yaxis.set_label_position("right")
+    ax[1].yaxis.tick_right()
+    ax[1].yaxis.set_label_position("right")
 
-        secax = ax[1].secondary_xaxis('top', functions=(to_thrsh, to_occ))
-        secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-        secax.set_xlabel('Threshold [mm/h]')
+    secax = ax[1].secondary_xaxis('top', functions=(to_thrsh, to_occ))
+    secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
+    secax.set_xlabel('Threshold [mm/h]')
             
-        fig.tight_layout()
-            
-        plt.savefig('plots/figure2.png')
-        plt.savefig('plots/figure2.pdf')
-        plt.close()
+    fig.tight_layout()
+    
+    plt.savefig('plots/figure2.png')
+    plt.savefig('plots/figure2.pdf')
+    plt.close()
 
 
 def plot_FSS_variants():
@@ -271,19 +270,12 @@ def plot_FSSprob():
     # # figure 6, fss prob dependence on ensemble size
     # for window sizes and threshold
 
-    fss_collection = xr.open_dataset('../data/fss_ens_truth/fss_no_thrsh_ens_mean.nc')
+    fss_collection = xr.open_dataset('../data/fss_no_thrsh_ens_mean.nc')
 
-    times = fss_collection.timestamp.values
-    lead_times = fss_collection.lead_time.values
     thrsh = fss_collection.thrsh.values
     window = fss_collection.window.values
     ens_size = fss_collection.ens_size.values
 
-    n_times = len(times)
-    n_thrsh = len(thrsh)
-    n_window = len(window)
-    n_ens = len(ens_size)
-    
     mean_fss = fss_collection.mean_fss.mean('timestamp').values
 
     all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
@@ -333,9 +325,33 @@ def plot_FSSprob():
     plt.show()
 
 
+
+
+def plot_LFSSprob():
     # # figure 7, belivable scale prob dependence on ensemble size
     # for window sizes and threshold
-    bel_scale = xr.open_dataset('../data/random_truth_ensemble/bel_scale_no_thrsh.nc')
+    
+    fss_collection = xr.open_dataset('../data/fss_no_thrsh_ens_mean.nc')
+
+    thrsh = fss_collection.thrsh.values
+    window = fss_collection.window.values
+    ens_size = fss_collection.ens_size.values
+
+    
+    mean_fss = fss_collection.mean_fss.mean('timestamp').values
+
+    all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
+    perc = np.empty(len(thrsh))
+
+    for i in range(len(thrsh)):
+        free_idx = np.argmin(np.abs(thrsh[i]-all_thrsh))
+        perc[i] = all_perc[free_idx]
+
+    occ = 100 - perc
+    occ[-1] = 34
+    
+
+    bel_scale = xr.open_dataset('../data/bel_scale_no_thrsh.nc')
     bel_scale = bel_scale.bel_scale
 
     thrsh_idx = [1, 7, 15]
@@ -382,80 +398,7 @@ def plot_FSSprob():
     plt.savefig('plots/figure7.pdf')
     plt.show()
 
-def plot_LFSSprob():
-    # # figure 9, belivable scale prob dependence on threshold
-    # for window sizes and ens_size
     
-    fss_collection = xr.open_dataset('../data/fss_ens_truth/fss_no_thrsh_ens_mean.nc')
-
-    thrsh = fss_collection.thrsh.values
-    window = fss_collection.window.values
-    ens_size = fss_collection.ens_size.values
-
-    
-    mean_fss = fss_collection.mean_fss.mean('timestamp').values
-
-    all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
-    perc = np.empty(len(thrsh))
-
-    for i in range(len(thrsh)):
-        free_idx = np.argmin(np.abs(thrsh[i]-all_thrsh))
-        perc[i] = all_perc[free_idx]
-
-    occ = 100 - perc
-    occ[-1] = 34
-    
-    bel_scale = xr.open_dataset('../data/random_truth_ensemble/bel_scale_no_thrsh.nc')
-    bel_scale = bel_scale.bel_scale
-
-    ens_idx = [0, 3, 5, 10]
-    single_ens = 5
-
-    fig = plt.figure(figsize=(SCALE*2*6.4, SCALE*4.8))
-    gs = GridSpec(1, 4, width_ratios=(1, 0.05, 0.01, 1), figure=fig)
-    gs.update(top=.95, bottom=0.05, left=0.05, right=.95, hspace=0, wspace=0.2)
-    
-    ax0 = fig.add_subplot(gs[0])
-    colbar = ax0.contourf(occ[:-1], window, mean_fss[single_ens,:-1,:].T, cmap=cmap, levels=np.arange(0,1.1,0.1))
-    ax0.plot(occ[:-1], bel_scale[single_ens,:-1], label='Skillful Scale', color='k')
-    ax0.legend()
-    ax0.semilogy()
-
-    secax = ax0.secondary_xaxis('top', functions=(to_thrsh, to_occ))
-    secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-    secax.set_xlabel('Threshold [mm/h]')
-
-    ax0.set_xlabel('Frequency of Occurence [%]')
-    ax0.set_ylabel('Spatial Scale [km]')
-    ax0.set_title('n = {}'.format(ens_size[single_ens]))
-
-    cax = fig.add_subplot(gs[1])
-    fig.colorbar(colbar, cax=cax, label='FSS [ ]', ticks=np.arange(0,1.1,0.1))
-
-    ax1 = fig.add_subplot(gs[3])
-    #ax0.sharey(ax1)
-    for i, e in enumerate(ens_idx):
-        lbl = 'n = {}'.format(ens_size[e])
-        ax1.plot(occ[:-1], bel_scale[e,:-1], label=lbl, linestyle=stylelist[i], color=vir4[i])
-
-    ax1.legend()
-    ax1.set_xlim(0)
-    #ax1.semilogy()
-
-    secax = ax1.secondary_xaxis('top', functions=(to_thrsh, to_occ))
-    secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-    secax.set_xlabel('Threshold [mm/h]')
-
-    ax1.yaxis.tick_right()
-    ax1.yaxis.set_label_position("right")
-    ax1.set_xlabel('Frequency of Occurence [%]')
-    ax1.set_ylabel('Skillful Scale [km]')
-    #ax1.set_title('xxx')
-
-    gs.tight_layout(fig)
-    plt.savefig('plots/figure8.png')
-    plt.savefig('plots/figure8.pdf')
-    plt.show()
 
 
 if __name__ == "__main__":
