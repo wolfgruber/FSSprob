@@ -160,16 +160,14 @@ def plot_FSS_variants():
     # # figure 4, fss variants dependence on thrsh and neighbourhood size
     # load data
     fss_collection = xr.open_dataset('../data/fss_comparison_0.0mm.nc')
-    
-    times = fss_collection.timestamp.values
+
     thrsh = fss_collection.thrsh.values
     window = fss_collection.window.values
     ens_size = fss_collection.ens_size.values
-    ens_size_comparison = fss_collection.ens_size.values
     
     fss_fbs = fss_collection.fss_sch.mean('timestamp').values
     fss_mean = fss_collection.fss_mean.mean('timestamp').values
-    fss_single = fss = fss_collection.fss.sel(ens_size=1).mean('timestamp').values
+    fss_single = fss_collection.fss.sel(ens_size=1).mean('timestamp').values
     fss_prob = fss_collection.fss.mean('timestamp').values
     
     all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
@@ -390,16 +388,10 @@ def plot_LFSSprob():
     
     fss_collection = xr.open_dataset('../data/fss_ens_truth/fss_no_thrsh_ens_mean.nc')
 
-    times = fss_collection.timestamp.values
-    lead_times = fss_collection.lead_time.values
     thrsh = fss_collection.thrsh.values
     window = fss_collection.window.values
     ens_size = fss_collection.ens_size.values
 
-    n_times = len(times)
-    n_thrsh = len(thrsh)
-    n_window = len(window)
-    n_ens = len(ens_size)
     
     mean_fss = fss_collection.mean_fss.mean('timestamp').values
 
