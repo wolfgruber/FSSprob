@@ -256,8 +256,8 @@ if __name__ == "__main__":
     var_list = xens.data_vars.keys()
     print ('Variables:', var_list)
 
-    s_lat=np.load('/jetfs/shared-data/tnecker_1000_member/kwork/experiments/lat2d_high_resolution.npy')
-    s_lon=np.load('/jetfs/shared-data/tnecker_1000_member/kwork/experiments/lon2d_high_resolution.npy')
+    s_lat=np.load('/path/to/data/lat2d_high_resolution.npy')
+    s_lon=np.load('/path/to/data/lon2d_high_resolution.npy')
 
     xens['prec'].sel(time='2016-05-29T18:00:00.000000000').max().values * 3600
 
