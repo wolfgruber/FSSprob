@@ -127,10 +127,10 @@ def fss_prob(fcst, obs, thrsh, window):
 
     Parameters
     ----------
-    fcst : xarray
+    fcst : numpy.array or xarray
         forecast to verify. In each forecast the ensemble members are arranged
         on the first axis.
-    obs : xarray
+    obs : numpy.array or xarray
         observation to verify the forecast.
     thrsh : np.array
         thresholds for which the FSS is computed.
@@ -140,7 +140,7 @@ def fss_prob(fcst, obs, thrsh, window):
     Returns
     -------
     fss : np.array
-        FSS aranged like [ensemble size, threshold, window].
+        FSS aranged like [threshold, window].
 
     '''
     n_thrsh = len(thrsh)
