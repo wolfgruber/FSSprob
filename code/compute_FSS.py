@@ -9,10 +9,7 @@ e-mail: ludwig.wolfgruber@gmx.at
 """
 
 
-import xarray as xr
 import numpy as np
-import datetime as dt
-import pickle
 
 
 # defining functions:
@@ -86,7 +83,9 @@ def integral_filter(field, n, table=None):
 
 def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
     '''
-    Compute the fraction skill score using summed area tables. 
+    Compute the fraction skill score using summed area tables. Attention: input
+    fields are already probabilities/frequencies, use fss_prob() for physical 
+    quantities.
 
     Parameters
     ----------
