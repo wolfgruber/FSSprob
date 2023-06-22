@@ -5,8 +5,10 @@ Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (F
 The folder `code` contains the Python and Fortran scripts which contain functions and subroutines for calculating the FSS for deterministic and probabilistic forecasts using a fast lookup table method instead of convolutions. The Python code can be imported from `code/compute_FSS.py`.
 
 The Fortran code is written so it can be compiled into a python module using numpys `f2py`. You can compile it by running
+
     f2py -c -m fss90 mod_fss.f90 --f90flags="-O3"
 In python include the module with
+
     from fss90 import mod_fss
 A usecase of the `f2py`-compiled Fortran code can be seen in the script `code/fss_script.py`.
 
