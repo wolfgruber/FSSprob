@@ -1,5 +1,5 @@
 ! Created on  10.03.2022
-! Last update 13.06.2023
+! Last update 22.06.2023
 !
 ! author: Ludwig Wolfgruber
 ! e-mail: ludwig.wolfgruber@gmx.at
@@ -56,13 +56,13 @@ SUBROUTINE integral_filter (n1, n2, kernel, field_in, field_out)
     
     ELSE ! case odd sized kernel
         DO i=1, n1
-            r0(i) = MAX(1, i-radius-1)
-            r1(i) = MIN(n1, i+radius)
+            r0(i) = MAX(1, i-radius)
+            r1(i) = MIN(n1, i+radius+1)
         END DO
         
         DO j=1, n2
-            c0(j) = MAX(1, j-radius-1)
-            c1(j) = MIN(n2, j+radius)
+            c0(j) = MAX(1, j-radius)
+            c1(j) = MIN(n2, j+radius+1)
         END DO
     
     END IF

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on  10.03.2022
-Last update 13.06.2023
+Last update 22.06.2023
 
 author: Ludwig Wolfgruber
 e-mail: ludwig.wolfgruber@gmx.at
@@ -65,11 +65,11 @@ def integral_filter(field, n, table=None):
     r0, c0 = (np .clip(r - w, 0, field.shape[0] - 1),
               np.clip(c - w, 0, field.shape[1] - 1))
     
-    if n % 2 == 0:
+    if n % 2 == 0: # even sized kernel
         r1, c1 = (np.clip(r + w, 0, field.shape[0] - 1),
                   np.clip(c + w, 0, field.shape[1] - 1))
         
-    else:
+    else: # odd sized kernel
         r1, c1 = (np.clip(r + w + 1, 0, field.shape[0] - 1),
                   np.clip(c + w + 1, 0, field.shape[1] - 1))
         
