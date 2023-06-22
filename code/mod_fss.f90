@@ -178,7 +178,7 @@ SUBROUTINE fss_prob (n1, n2, n_ens, n_thrsh, n_kernel, fcst, obs, thrsh, kernel,
         CALL fss_one_thrsh (n1, n2, n_kernel, kernel, fcst_field, obs_field, fss(i,:))
     END DO
    
-END SUBROUTINE ensemble_fss_one_lead_time
+END SUBROUTINE fss_prob
 
 
 SUBROUTINE ensemble_fss_one_lead_time (n1, n2, n_ens, n_ens_size, n_thrsh, n_kernel, fcst, obs, ens_size, thrsh, kernel, fss)

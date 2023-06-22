@@ -43,7 +43,9 @@ plt.rcParams['figure.dpi'] = 300
 plt.rcParams['axes.grid'] = True
 
 # load threshold data for all functions
-all_thrsh, all_perc = np.load('../data/percentile_no_thrsh_random.npy',  allow_pickle=True)
+thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
+all_perc = thrsh_perc.percentile.values
+all_thrsh = thrsh_perc.thrsh.values
 all_occ = 100 - all_perc
 occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
 thrsh = np.array([15.358784165382353, 6.546857919692981, 4.558161976337443,
@@ -92,7 +94,9 @@ def dev_by_three(x):
 def plot_precep_statistic():
     # # figure 2, precipitation statistics
     # load and average the data
-    all_thrsh, all_perc = np.load('../data/percentile_no_thrsh_random.npy',  allow_pickle=True)
+    thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
+    all_perc = thrsh_perc.percentile.values
+    all_thrsh = thrsh_perc.thrsh.values
     all_occ = 100 - all_perc
     occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
     thrsh = np.array([15.358784165382353, 6.546857919692981, 4.558161976337443,
@@ -102,7 +106,8 @@ def plot_precep_statistic():
                       0.0668206149339677, 0.042710336297750465, 0.02781107142567632,
                       0.016654083877801935, 0.009048837069422012, 0.0])
     
-    above_thrsh = np.load('../data/above_thrsh.npy')
+    above_thrsh_ds = xr.load_dataset('../data/above_thrsh.nc')
+    above_thrsh = above_thrsh_ds.above_thrsh.values
     above_thrsh = np.array([above_thrsh[:,:,i].flatten() for i in range(len(thrsh))])
     mean_above = np.mean(above_thrsh, axis=1)
     median_above = np.median(above_thrsh, axis=1)
@@ -158,18 +163,17 @@ def plot_precep_statistic():
 def plot_FSS_variants():
     # # figure 4, fss variants dependence on thrsh and neighbourhood size
     # load data
-    fss_collection = xr.open_dataset('../data/fss_comparison_0.0mm.nc')
+    fss_collection = xr.open_dataset('../data/fss_comparison.nc')
 
     thrsh = fss_collection.thrsh.values
     window = fss_collection.window.values
     ens_size = fss_collection.ens_size.values
     
-    fss_fbs = fss_collection.fss_sch.mean('timestamp').values
-    fss_mean = fss_collection.fss_mean.mean('timestamp').values
-    fss_single = fss_collection.fss.sel(ens_size=1).mean('timestamp').values
-    fss_prob = fss_collection.fss.mean('timestamp').values
-    
-    all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
+    fss_fbs = fss_collection.FSSsum.mean('timestamp').values
+    fss_mean = fss_collection.FSSmean.mean('timestamp').values
+    fss_single = fss_collection.FSSprob.sel(ens_size=1).mean('timestamp').values
+    fss_prob = fss_collection.FSSprob.mean('timestamp').values
+
     occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
 
     single_thrsh = 7
@@ -264,7 +268,7 @@ def plot_FSS_variants():
     plt.tight_layout()
     plt.savefig('plots/figure5.png')
     plt.savefig('plots/figure5.pdf')
-    plt.show()
+    plt.close()
 
 def plot_FSSprob():
     # # figure 6, fss prob dependence on ensemble size
@@ -278,7 +282,9 @@ def plot_FSSprob():
 
     mean_fss = fss_collection.mean_fss.mean('timestamp').values
 
-    all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
+    thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
+    all_perc = thrsh_perc.percentile.values
+    all_thrsh = thrsh_perc.thrsh.values
     perc = np.empty(len(thrsh))
 
     for i in range(len(thrsh)):
@@ -322,7 +328,7 @@ def plot_FSSprob():
     plt.tight_layout()
     plt.savefig('plots/figure6.png')
     plt.savefig('plots/figure6.pdf')
-    plt.show()
+    plt.close()
 
 
 
@@ -340,7 +346,10 @@ def plot_LFSSprob():
     
     mean_fss = fss_collection.mean_fss.mean('timestamp').values
 
-    all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
+    #all_thrsh, all_perc = np.load("../data/percentile_no_thrsh_random.npy")
+    thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
+    all_perc = thrsh_perc.percentile.values
+    all_thrsh = thrsh_perc.thrsh.values
     perc = np.empty(len(thrsh))
 
     for i in range(len(thrsh)):
@@ -351,7 +360,7 @@ def plot_LFSSprob():
     occ[-1] = 34
     
 
-    bel_scale = xr.open_dataset('../data/bel_scale_no_thrsh.nc')
+    bel_scale = xr.open_dataset('../data/bel_scale.nc')
     bel_scale = bel_scale.bel_scale
 
     thrsh_idx = [1, 7, 15]
@@ -396,7 +405,7 @@ def plot_LFSSprob():
     gs.tight_layout(fig)
     plt.savefig('plots/figure7.png')
     plt.savefig('plots/figure7.pdf')
-    plt.show()
+    plt.close()
 
     
 
