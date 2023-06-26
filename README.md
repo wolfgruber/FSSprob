@@ -1,6 +1,6 @@
 Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (FSS). This code was used to produce results for the study "The fractions skill score for ensemble forecast verification". The code builds on an algorithm by Faggian et al. (2015) which contained a small bug.
 
-Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8070343.svg)](https://doi.org/10.5281/zenodo.8070343)
+Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8082583.svg)](https://doi.org/10.5281/zenodo.8082583)
 
 # Usage
 ## Computing
