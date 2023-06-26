@@ -12,7 +12,9 @@ The Fortran code is written so it can be compiled into a python module using num
 In python include the module with
 
     from fss90 import mod_fss
-A usecase of the `f2py`-compiled Fortran code can be seen in the script `code/fss_script.py`.
+A usecase of the `f2py`-compiled Fortran code can be seen in the script `code/fss_script.py`. To first compile the Fortran module and run the python script you can use the bash script `code/compile_and_run.sh`
+
+The file `code/compare_fss_falvors.py` contains python functions to compute the different variants of the probabilistic FSS.
 
 ## Data
 The folder `data` contains the results in NetCDF format which are presented in the accompanying research article (yet to be published).

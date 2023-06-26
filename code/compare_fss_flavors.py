@@ -11,52 +11,6 @@ import numpy as np
 import compute_FSS as cf
 
 
-"""def fss_prob(fcst, obs, thrsh, window):
-    '''
-    Apply probabilisic FSS on a list of forecast - observation data, with
-    ensemble size given in ens_size and different thresholds given in thrsh.
-    The ensebles are prepared that before taking the average, the members are
-    compared with the threshold.
-
-    Parameters
-    ----------
-    fcst : xarray
-        forecast to verify. In each forecast the ensemble members are arranged
-        on the first axis.
-    obs : xarray
-        observation to verify the forecast.
-    thrsh : np.array
-        thresholds for which the FSS is computed.
-    window : np.array
-        windows (neighbourhoods, kernel sizes) for which the FSS is computed.
-
-    Returns
-    -------
-    fss : np.array
-        FSS aranged like [forecast, ensemble size, threshold, window].
-    '''
-    n_thrsh = len(thrsh)
-    n_window = len(window)
-    
-    fss = np.empty((n_thrsh, n_window))
-
-                
-    for l in range(n_thrsh):
-        thr_fcst = np.mean(fcst >= thrsh[l], axis=0)
-        thr_obs = obs >= thrsh[l]
-
-                            
-        fcst_cache = cf.compute_integral_table(thr_fcst)
-        obs_cache = cf.compute_integral_table(thr_obs)
-                    
-        for m in range(n_window):
-            _, _, fss[l,m] = cf.compute_fss(
-                fcst=thr_fcst, obs=thr_obs, window=window[m],
-                fcst_cache=fcst_cache, obs_cache=obs_cache
-                )
-
-    return fss"""
-
 fss_prob = cf.fss_prob
 
 
