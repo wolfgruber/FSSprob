@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on  10.03.2022
-Last update 22.06.2023
+Last update 26.06.2023
 
 author: Ludwig Wolfgruber
 e-mail: ludwig.wolfgruber@gmx.at
@@ -115,7 +115,7 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
     num = np.power(fhat - ohat, 2).sum()
     denom = (np.power(fhat, 2) + np.power(ohat, 2)).sum()
     
-    return 1. - num / denom
+    return num, denom, 1. - num / denom
 
 
 def fss_prob(fcst, obs, thrsh, window):
@@ -155,7 +155,7 @@ def fss_prob(fcst, obs, thrsh, window):
         obs_cache = compute_integral_table(thr_obs)
                     
         for m in range(n_window):
-            fss[l,m] = compute_fss(
+            _, _, fss[l,m] = compute_fss(
                 fcst=thr_fcst, obs=thr_obs, window=window[m],
                 fcst_cache=fcst_cache, obs_cache=obs_cache
                 )
@@ -199,7 +199,7 @@ def fss_det(fcst, obs, thrsh, window):
         obs_cache = compute_integral_table(thr_obs)
                     
         for m in range(n_window):
-            fss[l,m] = compute_fss(
+            _, _, fss[l,m] = compute_fss(
                 fcst=thr_fcst, obs=thr_obs, window=window[m],
                 fcst_cache=fcst_cache, obs_cache=obs_cache
                 )
@@ -260,7 +260,7 @@ def apply_fss_mean_in_ens(fcst, obs, ens_size, thrsh, window):
                 obs_cache = compute_integral_table(thr_obs)
                     
                 for m in range(n_window):
-                    fss_mean[k,l,m] = compute_fss(
+                    _, _, fss_mean[k,l,m] = compute_fss(
                         fcst=thr_fcst, obs=thr_obs,window=window[m],
                         fcst_cache=fcst_cache, obs_cache=obs_cache
                         )

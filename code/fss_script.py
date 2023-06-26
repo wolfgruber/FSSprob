@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from fss90 import mod_fss
 from compute_FSS import fss_prob, fss_det
+import compare_fss_flavors as cff
 
 n1 = 30
 n2 = 30
@@ -28,6 +29,8 @@ fss_f90 = mod_fss.fss_prob(fcst, obs, thrsh, kernel)
 
 plt.plot(kernel, fss_py[0,:], label='python')
 plt.plot(kernel, fss_f90[0,:], label='f90', linestyle='dashed')
+plt.xlabel('Neighborhood')
+plt.ylabel('FSS')
 plt.legend()
 plt.grid()
 plt.show()
@@ -39,3 +42,17 @@ fss_py = fss_det(fcst[0,:,:], obs, thrsh, kernel)
 fss_f90 = mod_fss.fss_det(fcst[0,:,:], obs, thrsh, kernel)
 
 print('det,  all close:', np.allclose(fss_py, fss_f90))
+
+# compare FSS flavors
+fss_prob = cff.fss_prob(fcst, obs, thrsh, kernel)
+fss_sum = cff.fss_sum(fcst, obs, thrsh, kernel)
+fss_mean = cff.fss_mean(fcst, obs, thrsh, kernel)
+
+plt.plot(thrsh, fss_prob[:,0], label='FSSprob')
+plt.plot(thrsh, fss_sum[:,0], label='FSSsum', linestyle='dashed')
+plt.plot(thrsh, fss_mean[:,0], label='FSSmean', linestyle='dashed')
+plt.xlabel('Thrsh')
+plt.ylabel('FSS')
+plt.legend()
+plt.grid()
+plt.show()
