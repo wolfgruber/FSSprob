@@ -181,6 +181,38 @@ SUBROUTINE fss_prob (n1, n2, n_ens, n_thrsh, n_kernel, fcst, obs, thrsh, kernel,
 END SUBROUTINE fss_prob
 
 
+SUBROUTINE fss_det (n1, n2, n_thrsh, n_kernel, fcst, obs, thrsh, kernel, fss)
+    ! compute the deterministic FSS for one (forecast, observation) pair and
+    ! different thresholds and kernel sizes. The field forecast has dimensions
+    ! (x, y) and contains real forcast variables.
+    INTEGER, INTENT(IN) :: n1, n2, n_thrsh, n_kernel
+    INTEGER, INTENT(IN) :: kernel(n_kernel)
+    INTEGER             :: i, j
+    REAL, INTENT(IN)    :: fcst(n1, n2), obs(n1, n2), thrsh(n_thrsh)
+    REAL                :: fcst_field(n1, n2), obs_field(n1, n2)
+    REAL, INTENT(OUT)   :: fss(n_thrsh, n_kernel)
+    
+    fss  = 0.
+
+    DO i=1, n_thrsh
+        WHERE (obs >= thrsh(i))
+            obs_field = 1.
+        ELSEWHERE
+            obs_field = 0.
+        END WHERE
+
+        WHERE (fcst >= thrsh(i))
+            fcst_field = 1.
+        ELSEWHERE
+            fcst_field = 0.
+        END WHERE
+
+        CALL fss_one_thrsh (n1, n2, n_kernel, kernel, fcst_field, obs_field, fss(i,:))
+    END DO
+   
+END SUBROUTINE fss_det
+
+
 SUBROUTINE ensemble_fss_one_lead_time (n1, n2, n_ens, n_ens_size, n_thrsh, n_kernel, fcst, obs, ens_size, thrsh, kernel, fss)
     ! compute the FSSprob for one (ensemble forecast, observation) pair and
     ! different ensemble subsamples, thresholds and kernel sizes. A setup like

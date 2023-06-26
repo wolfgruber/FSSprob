@@ -10,7 +10,7 @@ Last update 22.06.2023
 import numpy as np
 import matplotlib.pyplot as plt
 from fss90 import mod_fss
-from compute_FSS import fss_prob
+from compute_FSS import fss_prob, fss_det
 
 n1 = 30
 n2 = 30
@@ -22,6 +22,7 @@ np.random.seed(0)
 fcst = np.random.random((N, n1, n2))
 obs = np.random.randint(0, 2, (n1, n2))
 
+# test probabilistic FSS
 fss_py = fss_prob(fcst, obs, thrsh, kernel)
 fss_f90 = mod_fss.fss_prob(fcst, obs, thrsh, kernel)
 
@@ -31,4 +32,10 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print('all close:', np.allclose(fss_py, fss_f90))
+print('prob, all close:', np.allclose(fss_py, fss_f90))
+
+# test deterministic FSS
+fss_py = fss_det(fcst[0,:,:], obs, thrsh, kernel)
+fss_f90 = mod_fss.fss_det(fcst[0,:,:], obs, thrsh, kernel)
+
+print('det,  all close:', np.allclose(fss_py, fss_f90))

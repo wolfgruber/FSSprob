@@ -120,9 +120,9 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
 
 def fss_prob(fcst, obs, thrsh, window):
     '''
-    Apply FSS on a pair of forecast - observation data, with different
-    thresholds given in thrsh and different windows (neighbourhoods, kernel
-    sizes) given in window.
+    Apply probabilistic FSS on a pair of forecast - observation data, with
+    different thresholds given in thrsh and different windows (neighbourhoods,
+    kernel sizes) given in window.
 
     Parameters
     ----------
@@ -149,6 +149,50 @@ def fss_prob(fcst, obs, thrsh, window):
 
     for l in range(n_thrsh):
         thr_fcst = np.mean(fcst >= thrsh[l], axis=0)
+        thr_obs = obs >= thrsh[l]
+                    
+        fcst_cache = compute_integral_table(thr_fcst)
+        obs_cache = compute_integral_table(thr_obs)
+                    
+        for m in range(n_window):
+            fss[l,m] = compute_fss(
+                fcst=thr_fcst, obs=thr_obs, window=window[m],
+                fcst_cache=fcst_cache, obs_cache=obs_cache
+                )
+    
+    return fss
+
+
+def fss_det(fcst, obs, thrsh, window):
+    '''
+    Apply FSS on a pair of forecast - observation data, with different
+    thresholds given in thrsh and different windows (neighbourhoods, kernel
+    sizes) given in window.
+
+    Parameters
+    ----------
+    fcst : numpy.array or xarray
+        deterministic forecast to verify.
+    obs : numpy.array or xarray
+        observation to verify the forecast.
+    thrsh : np.array
+        thresholds for which the FSS is computed.
+    window : np.array
+        windows (neighbourhoods, kernel sizes) for which the FSS is computed.
+
+    Returns
+    -------
+    fss : np.array
+        FSS aranged like [threshold, window].
+
+    '''
+    n_thrsh = len(thrsh)
+    n_window = len(window)
+    
+    fss = np.empty((n_thrsh, n_window))
+
+    for l in range(n_thrsh):
+        thr_fcst = fcst >= thrsh[l]
         thr_obs = obs >= thrsh[l]
                     
         fcst_cache = compute_integral_table(thr_fcst)
