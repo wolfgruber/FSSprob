@@ -52,7 +52,7 @@ def integral_filter(field, n, table=None):
 
     '''
     w = n // 2
-    if w < 1.:
+    if w < 1:
         return field
     
     if table is None: # compute integral table if not provided
@@ -62,7 +62,7 @@ def integral_filter(field, n, table=None):
     r = r.astype(int)
     c = c.astype(int)
     w = int(w)
-    r0, c0 = (np .clip(r - w, 0, field.shape[0] - 1),
+    r0, c0 = (np.clip(r - w, 0, field.shape[0] - 1),
               np.clip(c - w, 0, field.shape[1] - 1))
     
     if n % 2 == 0: # even sized kernel
@@ -110,8 +110,8 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
         FSS for given kernel size
         
     '''
-    fhat = integral_filter(fcst, window, fcst_cache).astype(np.float64)
-    ohat = integral_filter(obs, window, obs_cache).astype(np.float64)
+    fhat = integral_filter(fcst, window, fcst_cache)
+    ohat = integral_filter(obs, window, obs_cache)
     num = np.power(fhat - ohat, 2).sum()
     denom = (np.power(fhat, 2) + np.power(ohat, 2)).sum()
     

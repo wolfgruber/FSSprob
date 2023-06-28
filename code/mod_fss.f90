@@ -90,7 +90,7 @@ SUBROUTINE compute_fss_table (n1, n2, kernel, field1, field2, fss)
 END SUBROUTINE compute_fss_table
 
 
-SUBROUTINE compute_fss (n1, n2, kernel, field1, field2, fss)
+SUBROUTINE compute_fss_from_binary (n1, n2, kernel, field1, field2, fss)
     ! compute the FSS for one kernel size. The variables field1 and field2 have
     ! to contain probability values, either binary for deterministic case or in
     ! [0,1] for probabilisitc case. If different kernel sizes are computed
@@ -112,7 +112,7 @@ SUBROUTINE compute_fss (n1, n2, kernel, field1, field2, fss)
     denominator = SUM( fhat1**2 + fhat2**2 )
     
     fss = 1. - numinator / denominator
-END SUBROUTINE compute_fss
+END SUBROUTINE compute_fss_from_binary
 
 
 SUBROUTINE fss_one_thrsh (n1, n2, nkernel, kernel, field1, field2, fss)
