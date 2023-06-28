@@ -28,7 +28,7 @@ def compute_integral_table(field):
         cumulative sum of input in both dimensions.
 
     '''
-    return field.cumsum(1).cumsum(0)
+    return field.cumsum(1).cumsum(0).astype(float)
 
 
 def integral_filter(field, n, table=None):
@@ -53,7 +53,7 @@ def integral_filter(field, n, table=None):
     '''
     w = n // 2
     if w < 1:
-        return field
+        return field.astype(float)
     
     if table is None: # compute integral table if not provided
         table = compute_integral_table(field)
