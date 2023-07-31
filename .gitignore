@@ -1,2 +1,4 @@
 code/__pycache__
 code/*.so
+plotting/plots/*.png
+plotting/plots/*.pdf

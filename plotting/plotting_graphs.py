@@ -42,7 +42,7 @@ SCALE = 0.6
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['axes.grid'] = True
 
-# load threshold data for all functions
+# load Rain Rate data for all functions
 thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
 all_perc = thrsh_perc.percentile.values
 all_thrsh = thrsh_perc.thrsh.values
@@ -110,8 +110,6 @@ def plot_precep_statistic():
     above_thrsh = above_thrsh_ds.above_thrsh.values
     above_thrsh = np.array([above_thrsh[:,:,i].flatten() for i in range(len(thrsh))])
     mean_above = np.mean(above_thrsh, axis=1)
-    median_above = np.median(above_thrsh, axis=1)
-    p25_above, p75_above = np.quantile(above_thrsh, [0.25,0.75], axis=1)
     min_above = np.min(above_thrsh, axis=1)
     max_above = np.max(above_thrsh, axis=1)
 
@@ -119,8 +117,9 @@ def plot_precep_statistic():
 
     fig, ax = plt.subplots(1,2,figsize=(2*SCALE*6.4,SCALE*4.8))
 
-    ax[0].plot(all_occ, all_thrsh, color='k')
-    ax[0].scatter(occ, match_pos(occ, all_occ, all_thrsh), color='k', zorder=5, label='percentiles')
+    ax[0].plot(all_occ, all_thrsh, color='k', linewidth=1)
+    ax[0].scatter(occ, match_pos(occ, all_occ, all_thrsh), color='k',
+              zorder=5, label='percentiles', marker='+')
     for idx in thrsh_idx:
         ax[0].text(occ[idx]*1.1, thrsh[idx]*1.2, '{:.0f}'.format(100-occ[idx]))
     ax[0].semilogy()
@@ -128,12 +127,9 @@ def plot_precep_statistic():
     ax[0].set_ylim(10e-5)
     ax[0].legend()
     ax[0].set_xlabel('Frequency of Occurence [%]')
-    ax[0].set_ylabel('Threshold [mm/h]')
+    ax[0].set_ylabel('Rain Rate [mm/h]')
         
     ax[1].plot(occ[:], mean_above[:], linestyle=stylelist[0], color=vir4[0], label='mean')
-    ax[1].plot(occ[:], median_above[:], linestyle=stylelist[1], color=vir4[1], label='median')
-    ax[1].plot(occ[:], p25_above[:], linestyle=stylelist[2], color=vir4[2], label='percentiles 25 & 75')
-    ax[1].plot(occ[:], p75_above[:], linestyle=stylelist[2], color=vir4[2])
     ax[1].plot(occ[:], min_above[:], linestyle=stylelist[3], color=vir4[3], label='min & max')
     ax[1].plot(occ[:], max_above[:], linestyle=stylelist[3], color=vir4[3])
     ax[1].vlines(ymin=0, ymax=60, x=occ[thrsh_idx], linestyle='dashed', color='k', linewidth=1)
@@ -144,14 +140,14 @@ def plot_precep_statistic():
     ax[1].legend()
     #ax[1].semilogx()
     ax[1].set_xlabel('Frequency of Occurence [%]')
-    ax[1].set_ylabel('Grid Points above Threshold [%]')
+    ax[1].set_ylabel('Spatial Coverage [%]')
 
     ax[1].yaxis.tick_right()
     ax[1].yaxis.set_label_position("right")
 
     secax = ax[1].secondary_xaxis('top', functions=(to_thrsh, to_occ))
     secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-    secax.set_xlabel('Threshold [mm/h]')
+    secax.set_xlabel('Rain Rate [mm/h]')
             
     fig.tight_layout()
     
@@ -213,7 +209,7 @@ def plot_FSS_variants():
 
     secax = ax[1].secondary_xaxis('top', functions=(to_thrsh, to_occ))
     secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-    secax.set_xlabel('Threshold [mm/h]')
+    secax.set_xlabel('Rain Rate [mm/h]')
     
     fig.tight_layout()
     plt.savefig('plots/figure4.png')
@@ -223,7 +219,7 @@ def plot_FSS_variants():
 
 
     # # figure 5, fss variants dependence on ensemble size
-    # for mediate window size and threshold
+    # for mediate window size and Rain Rate
 
 
     fig, ax = plt.subplots(1,2,figsize=(2*SCALE*6.4,SCALE*4.8))
@@ -272,7 +268,7 @@ def plot_FSS_variants():
 
 def plot_FSSprob():
     # # figure 6, fss prob dependence on ensemble size
-    # for window sizes and threshold
+    # for window sizes and Rain Rate
 
     fss_collection = xr.open_dataset('../data/fss_no_thrsh_ens_mean.nc')
 
@@ -335,7 +331,7 @@ def plot_FSSprob():
 
 def plot_LFSSprob():
     # # figure 7, belivable scale prob dependence on ensemble size
-    # for window sizes and threshold
+    # for window sizes and Rain Rate
     
     fss_collection = xr.open_dataset('../data/fss_no_thrsh_ens_mean.nc')
 
