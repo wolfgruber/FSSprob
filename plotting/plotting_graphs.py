@@ -83,77 +83,13 @@ def to_occ(pos):
     out[neg] = 100
     return out
 
+
 def times_three(x):
     return 3*x
 
+
 def dev_by_three(x):
     return x/3
-
-
-
-def plot_precep_statistic():
-    # # figure 2, precipitation statistics
-    # load and average the data
-    thrsh_perc = xr.load_dataset('../data/percentile_threshold.nc')
-    all_perc = thrsh_perc.percentile.values
-    all_thrsh = thrsh_perc.thrsh.values
-    all_occ = 100 - all_perc
-    occ = np.array([0.25, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 34])#100])
-    thrsh = np.array([15.358784165382353, 6.546857919692981, 4.558161976337443,
-                      3.4287931823730475, 2.6827078282833097, 2.1295418691635,
-                      1.3871746397018434, 0.9479302614927281, 0.669832711219789,
-                      0.35095661997795163, 0.19140626490116194, 0.11011233389377595,
-                      0.0668206149339677, 0.042710336297750465, 0.02781107142567632,
-                      0.016654083877801935, 0.009048837069422012, 0.0])
-    
-    above_thrsh_ds = xr.load_dataset('../data/above_thrsh.nc')
-    above_thrsh = above_thrsh_ds.above_thrsh.values
-    above_thrsh = np.array([above_thrsh[:,:,i].flatten() for i in range(len(thrsh))])
-    mean_above = np.mean(above_thrsh, axis=1)
-    min_above = np.min(above_thrsh, axis=1)
-    max_above = np.max(above_thrsh, axis=1)
-
-    thrsh_idx = [1, 7, 15]
-
-    fig, ax = plt.subplots(1,2,figsize=(2*SCALE*6.4,SCALE*4.8))
-
-    ax[0].plot(all_occ, all_thrsh, color='k', linewidth=1)
-    ax[0].scatter(occ, match_pos(occ, all_occ, all_thrsh), color='k',
-              zorder=5, label='percentiles', marker='+')
-    for idx in thrsh_idx:
-        ax[0].text(occ[idx]*1.1, thrsh[idx]*1.2, '{:.0f}'.format(100-occ[idx]))
-    ax[0].semilogy()
-    ax[0].semilogx()
-    ax[0].set_ylim(10e-5)
-    ax[0].legend()
-    ax[0].set_xlabel('Frequency of Occurence [%]')
-    ax[0].set_ylabel('Rain Rate [mm/h]')
-        
-    ax[1].plot(occ[:], mean_above[:], linestyle=stylelist[0], color=vir4[0], label='mean')
-    ax[1].plot(occ[:], min_above[:], linestyle=stylelist[3], color=vir4[3], label='min & max')
-    ax[1].plot(occ[:], max_above[:], linestyle=stylelist[3], color=vir4[3])
-    ax[1].vlines(ymin=0, ymax=60, x=occ[thrsh_idx], linestyle='dashed', color='k', linewidth=1)
-    for idx in thrsh_idx:
-        ax[1].text(occ[idx]+0.25, 34, '{:.0f}'.format(100-occ[idx]))
-            
-    ax[1].set_xlim(0, 33)
-    ax[1].legend()
-    #ax[1].semilogx()
-    ax[1].set_xlabel('Frequency of Occurence [%]')
-    ax[1].set_ylabel('Spatial Coverage [%]')
-
-    ax[1].yaxis.tick_right()
-    ax[1].yaxis.set_label_position("right")
-
-    secax = ax[1].secondary_xaxis('top', functions=(to_thrsh, to_occ))
-    secax.set_xticks([10, 1, 0.1, 0.01], ['10', '1', '0.1', '0.01'])
-    secax.set_xlabel('Rain Rate [mm/h]')
-            
-    fig.tight_layout()
-    
-    plt.savefig('plots/figure2.png')
-    plt.savefig('plots/figure2.pdf')
-    plt.close()
 
 
 def plot_FSS_variants():
@@ -407,7 +343,6 @@ def plot_LFSSprob():
 
 
 if __name__ == "__main__":
-    plot_precep_statistic()
     plot_FSS_variants()
     plot_FSSprob()
     plot_LFSSprob()

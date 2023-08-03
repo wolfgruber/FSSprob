@@ -1,4 +1,4 @@
-Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (FSS). This code was used to produce results for the study "The fractions skill score for ensemble forecast verification". The code builds on an algorithm by Faggian et al. (2015) which contained a small bug.
+Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (FSS). This code was used to produce results for the study "The fractions skill score for ensemble forecast verification". The code builds on an algorithm by [Faggian et al. (2015)](https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/view/555) which contained a small bug.
 
 Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8082583.svg)](https://doi.org/10.5281/zenodo.8082583)
 
@@ -20,4 +20,4 @@ The file `code/compare_fss_falvors.py` contains python functions to compute the 
 The folder `data` contains the results in NetCDF format which are presented in the accompanying research article (yet to be published).
 
 ## Plotting
-The folder `plotting` contains two python scripts to recreate the figures of the research article. `plotting/plotting_graphs.py` displays the data stored in `data`. `plotting/plotting_maps.py` recreates the precipitation maps.
+The folder `plotting` contains two python scripts to recreate the figures of the research article. `plotting/plotting_graphs.py` displays the data stored in `data`. `plotting/plotting_maps.py` recreates the precipitation maps. Please note that the raw forecast files are not included in the dataset.
