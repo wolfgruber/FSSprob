@@ -115,7 +115,12 @@ def compute_fss(fcst, obs, window, fcst_cache=None, obs_cache=None):
     num = np.power(fhat - ohat, 2).sum()
     denom = (np.power(fhat, 2) + np.power(ohat, 2)).sum()
     
-    return num, denom, 1. - num / denom
+    if num == 0 and denom == 0:
+        fss = 1
+    else:
+        fss = 1. - num / denom
+    
+    return num, denom, fss
 
 
 def fss_prob(fcst, obs, thrsh, window):
