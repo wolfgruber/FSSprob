@@ -2,7 +2,7 @@ Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (F
 
 The branch `main` contains the FSSprob code, the data from the associated article and python scripts to plot the data. Users only interested in the FSSprob code might want to check out the branch `code_only`.
 
-Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8082583.svg)](https://doi.org/10.5281/zenodo.8082583)
+Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8070342.svg)](https://doi.org/10.5281/zenodo.8070342)
 
 # Usage
 ## Computing
