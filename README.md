@@ -2,7 +2,7 @@ Python3 and Fortran90 code to compute the probabilistic Fractions Skill Score (F
 
 The branch `main` contains the FSSprob code, the data from the associated article and python scripts to plot the data. Users only interested in the FSSprob code might want to check out the branch `code_only`.
 
-Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8082583.svg)](https://doi.org/10.5281/zenodo.8082583)
+Please cite as [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8070342.svg)](https://doi.org/10.5281/zenodo.8070342)
 
 # Usage
 ## Computing
@@ -16,4 +16,10 @@ In python include the module with
     from fss90 import mod_fss
 A usecase of the `f2py`-compiled Fortran code can be seen in the script `code/fss_script.py`. To first compile the Fortran module and run the python script you can use the bash script `code/compile_and_run.sh`
 
-The file `code/compare_fss_falvors.py` contains python functions to compute the different variants of the probabilistic FSS.
+The file `code/compare_fss_flavors.py` contains python functions to compute the different variants of the probabilistic FSS.
+
+## Data
+The folder `data` contains the results in NetCDF format which are presented in the accompanying research article (yet to be published).
+
+## Plotting
+The folder `plotting` contains two python scripts to recreate the figures of the research article. `plotting/plotting_graphs.py` displays the data stored in `data`. `plotting/plotting_maps.py` recreates the precipitation maps. Please note that the raw forecast files are not included in the dataset.

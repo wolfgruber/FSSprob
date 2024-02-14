@@ -86,7 +86,11 @@ SUBROUTINE compute_fss_table (n1, n2, kernel, field1, field2, fss)
     numinator = SUM( (fhat1 - fhat2)**2 )
     denominator = SUM( fhat1**2 + fhat2**2 )
     
-    fss = 1. - numinator / denominator
+    IF (numinator == 0. .AND. denominator == 0) THEN
+        fss = 1.
+    ELSE
+        fss = 1. - numinator / denominator
+    END IF
 END SUBROUTINE compute_fss_table
 
 
@@ -111,7 +115,11 @@ SUBROUTINE compute_fss_from_binary (n1, n2, kernel, field1, field2, fss)
     numinator = SUM( (fhat1 - fhat2)**2 )
     denominator = SUM( fhat1**2 + fhat2**2 )
     
-    fss = 1. - numinator / denominator
+    IF (numinator == 0. .AND. denominator == 0) THEN
+        fss = 1.
+    ELSE
+        fss = 1. - numinator / denominator
+    END IF
 END SUBROUTINE compute_fss_from_binary
 
 
@@ -135,7 +143,11 @@ SUBROUTINE fss_one_thrsh (n1, n2, nkernel, kernel, field1, field2, fss)
             numinator = SUM( (field1 - field2)**2 )
             denominator = SUM( field1**2 + field2**2 )
 
-            fss(i) = 1. - numinator / denominator
+            IF (numinator == 0. .AND. denominator == 0) THEN
+                fss = 1.
+            ELSE
+                fss = 1. - numinator / denominator
+            END IF
         ELSE
             CALL compute_fss_table(n1, n2, kernel(i), table1, table2, fss(i))
         END IF
