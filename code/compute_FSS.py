@@ -275,4 +275,3 @@ def apply_fss_mean_in_ens(fcst, obs, ens_size, thrsh, window):
         fss[j,:,:] = np.mean(fss_mean, axis=0)
     
     return fss
-
